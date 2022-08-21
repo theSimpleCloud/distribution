@@ -24,7 +24,7 @@
 
 plugins {
     java
-    id ("com.github.johnrengelman.shadow") version "7.0.0"
+    id("maven-publish")
     kotlin("jvm") version "1.7.10"
 }
 
@@ -35,7 +35,7 @@ allprojects {
     apply {
         plugin("java")
         plugin("org.jetbrains.kotlin.jvm")
-        plugin("com.github.johnrengelman.shadow")
+        plugin("maven-publish")
     }
 
     repositories {
@@ -47,7 +47,6 @@ allprojects {
 }
 
 subprojects {
-
     dependencies {
         implementation(kotlin("stdlib"))
         implementation("com.google.guava:guava:31.1-jre")
@@ -65,5 +64,24 @@ subprojects {
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    configure<PublishingExtension> {
+        repositories {
+            maven {
+                name = "repoFllip"
+                url = uri("https://repo.fllip.de/snapshots")
+                credentials(PasswordCredentials::class)
+                authentication {
+                    create<BasicAuthentication>("basic")
+                }
+            }
+        }
+
+        publications {
+            register<MavenPublication>("maven") {
+                from(components["java"])
+            }
+        }
     }
 }
