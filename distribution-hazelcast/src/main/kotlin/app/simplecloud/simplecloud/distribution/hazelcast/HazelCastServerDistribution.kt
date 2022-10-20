@@ -44,7 +44,6 @@ class HazelCastServerDistribution(
 
     private val selfComponent = ServerComponentImpl(this.hazelCast.cluster.localMember.uuid)
 
-
     private fun createHazelCastInstance(): HazelcastInstance {
         val config = Config()
         config.networkConfig.port = this.bindPort
@@ -60,7 +59,9 @@ class HazelCastServerDistribution(
         val serializerConfig = SerializerConfig()
             .setImplementation(DistributionAwareSerializer(this))
             .setTypeClass(DistributionAware::class.java)
-        config.serializationConfig.addSerializerConfig(serializerConfig)
+        config.serializationConfig
+            .addSerializerConfig(serializerConfig)
+            .compactSerializationConfig.isEnabled = true
         return Hazelcast.newHazelcastInstance(config)
     }
 

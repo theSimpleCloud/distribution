@@ -52,6 +52,7 @@ class HazelCastClientDistribution(
         config.networkConfig.azureConfig.isEnabled = false
         config.networkConfig.awsConfig.isEnabled = false
         config.networkConfig.cloudConfig.isEnabled = false
+        config.serializationConfig.compactSerializationConfig.isEnabled = true
         val hazelcastClient = try {
             HazelcastClient.newHazelcastClient(config)
         } catch (e: IllegalStateException) {
