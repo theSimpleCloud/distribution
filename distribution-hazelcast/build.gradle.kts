@@ -24,5 +24,5 @@
 
 dependencies {
     implementation(project(":distribution-api"))
-    implementation("com.hazelcast:hazelcast:5.1.1")
+    implementation("com.hazelcast:hazelcast:5.1.4")
 }
