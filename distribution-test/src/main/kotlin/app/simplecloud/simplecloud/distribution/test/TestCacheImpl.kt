@@ -76,6 +76,15 @@ class TestCacheImpl<K, V>(
         this.map.clear()
     }
 
+    override fun set(key: K, value: V) {
+        if (!this.map.containsKey(key)) {
+            this.entryListeners.forEach { it.entryAdded(key to value) }
+        } else {
+            this.entryListeners.forEach { it.entryUpdated(key to value) }
+        }
+        this.map.set(key, value)
+    }
+
     override fun put(key: K, value: V): V? {
         val result = this.map.put(key, value)
         if (result == null) {

@@ -77,16 +77,35 @@ class HazelCastCache<K, V>(
         this.hazelMap.clear()
     }
 
+    override fun set(key: K, value: V) {
+        try {
+            this.hazelMap.lock(key)
+            this.hazelMap.set(key, value)
+        } finally {
+            this.hazelMap.unlock(key)
+        }
+    }
+
     override fun put(key: K, value: V): V? {
-        return this.hazelMap.put(key, value)
+        try {
+            this.hazelMap.lock(key)
+            return this.hazelMap.put(key, value)
+        } finally {
+            this.hazelMap.unlock(key)
+        }
     }
 
     override fun putAll(from: Map<out K, V>) {
-        this.hazelMap.putAll(from)
+        this.hazelMap.setAll(from)
     }
 
     override fun remove(key: K): V? {
-        return this.hazelMap.remove(key)
+        try {
+            this.hazelMap.lock(key)
+            return this.hazelMap.remove(key)
+        } finally {
+            this.hazelMap.unlock(key)
+        }
     }
 
     override fun addEntryListener(entryListener: EntryListener<K, V>) {

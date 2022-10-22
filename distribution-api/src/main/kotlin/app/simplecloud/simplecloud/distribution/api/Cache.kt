@@ -36,6 +36,8 @@ interface Cache<K, V> : MutableMap<K, V>  {
 
     fun first(): Map.Entry<K, V>
 
+    fun set(key: K, value: V)
+
     fun addEntryListener(entryListener: EntryListener<K, V>)
 
     fun distributedQuery(predicate: Predicate<K, V>): Collection<V>
