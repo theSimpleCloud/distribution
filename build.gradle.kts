@@ -30,7 +30,7 @@ plugins {
 
 allprojects {
     group = "app.simplecloud"
-    version = "1.0.1-SNAPSHOT"
+    version = "1.0.2-SNAPSHOT"
 
     apply {
         plugin("java")
