@@ -30,7 +30,7 @@ plugins {
 
 allprojects {
     group = "app.simplecloud"
-    version = "1.0.2-SNAPSHOT"
+    version = "1.0.3-SNAPSHOT"
 
     apply {
         plugin("java")
@@ -70,7 +70,7 @@ subprojects {
         repositories {
             maven {
                 name = "repoFllip"
-                url = uri("https://repo.fllip.de/snapshots")
+                url = uri("https://repo.fllip.dev/snapshots")
                 credentials(PasswordCredentials::class)
                 authentication {
                     create<BasicAuthentication>("basic")
