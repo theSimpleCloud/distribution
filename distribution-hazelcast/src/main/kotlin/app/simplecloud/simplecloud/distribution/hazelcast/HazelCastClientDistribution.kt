@@ -35,7 +35,8 @@ import com.hazelcast.core.HazelcastInstance
 import java.net.ConnectException
 
 class HazelCastClientDistribution(
-    private val connectAddress: Address
+    private val connectAddress: Address,
+    private val classLoader: ClassLoader = HazelCastServerDistribution::class.java.classLoader,
 ) : AbstractHazelCastDistribution() {
 
     private val hazelCast: HazelcastInstance = createHazelCastInstance()
@@ -53,6 +54,7 @@ class HazelCastClientDistribution(
         config.networkConfig.awsConfig.isEnabled = false
         config.networkConfig.cloudConfig.isEnabled = false
         config.serializationConfig.compactSerializationConfig.isEnabled = true
+        config.classLoader = this.classLoader
         val hazelcastClient = try {
             HazelcastClient.newHazelcastClient(config)
         } catch (e: IllegalStateException) {
