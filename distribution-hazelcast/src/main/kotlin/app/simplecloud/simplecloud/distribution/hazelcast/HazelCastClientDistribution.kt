@@ -36,7 +36,7 @@ import java.net.ConnectException
 
 class HazelCastClientDistribution(
     private val connectAddress: Address,
-    private val classLoader: ClassLoader = HazelCastServerDistribution::class.java.classLoader,
+    private val classLoader: ClassLoader
 ) : AbstractHazelCastDistribution() {
 
     private val hazelCast: HazelcastInstance = createHazelCastInstance()

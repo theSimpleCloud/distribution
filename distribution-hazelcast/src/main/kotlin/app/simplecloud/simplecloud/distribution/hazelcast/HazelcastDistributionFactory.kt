@@ -38,12 +38,13 @@ class HazelcastDistributionFactory : DistributionFactory {
 
     override fun createServer(
         port: Int,
-        connectAddresses: List<Address>
+        connectAddresses: List<Address>,
+        classLoader: ClassLoader
     ): Distribution {
-        return HazelCastServerDistribution(port, connectAddresses)
+        return HazelCastServerDistribution(port, connectAddresses, classLoader)
     }
 
-    override fun createClient(connectAddress: Address): Distribution {
-        return HazelCastClientDistribution(connectAddress)
+    override fun createClient(connectAddress: Address, classLoader: ClassLoader): Distribution {
+        return HazelCastClientDistribution(connectAddress, classLoader)
     }
 }

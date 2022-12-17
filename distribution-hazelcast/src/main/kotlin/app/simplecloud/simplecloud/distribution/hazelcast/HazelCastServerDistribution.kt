@@ -38,7 +38,7 @@ import com.hazelcast.core.HazelcastInstance
 class HazelCastServerDistribution(
     private val bindPort: Int,
     private val connectAddresses: List<Address>,
-    private val classLoader: ClassLoader = HazelCastServerDistribution::class.java.classLoader,
+    private val classLoader: ClassLoader,
 ) : AbstractHazelCastDistribution() {
 
     private val hazelCast: HazelcastInstance = createHazelCastInstance()

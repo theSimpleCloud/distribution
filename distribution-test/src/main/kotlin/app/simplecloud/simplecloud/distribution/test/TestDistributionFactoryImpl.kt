@@ -31,11 +31,11 @@ import app.simplecloud.simplecloud.distribution.api.DistributionFactory
 
 class TestDistributionFactoryImpl : DistributionFactory {
 
-    override fun createServer(port: Int, addresses: List<Address>): Distribution {
+    override fun createServer(port: Int, addresses: List<Address>, classLoader: ClassLoader): Distribution {
         return TestServerDistributionImpl(port, addresses)
     }
 
-    override fun createClient(address: Address): Distribution {
+    override fun createClient(address: Address, classLoader: ClassLoader): Distribution {
         return TestClientDistributionImpl(address)
     }
 

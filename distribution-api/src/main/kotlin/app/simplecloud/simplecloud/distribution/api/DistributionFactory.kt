@@ -33,8 +33,15 @@ package app.simplecloud.simplecloud.distribution.api
  */
 interface DistributionFactory {
 
-    fun createServer(port: Int, connectAddresses: List<Address>): Distribution
+    fun createServer(
+        port: Int,
+        connectAddresses: List<Address>,
+        classLoader: ClassLoader = DistributionFactory::class.java.classLoader
+    ): Distribution
 
-    fun createClient(connectAddress: Address): Distribution
+    fun createClient(
+        connectAddress: Address,
+        classLoader: ClassLoader = DistributionFactory::class.java.classLoader
+    ): Distribution
 
 }
