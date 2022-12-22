@@ -24,10 +24,7 @@
 
 package app.simplecloud.simplecloud.distribution.api.test
 
-import app.simplecloud.simplecloud.distribution.api.Address
-import app.simplecloud.simplecloud.distribution.api.Distribution
-import app.simplecloud.simplecloud.distribution.api.DistributionFactory
-import app.simplecloud.simplecloud.distribution.api.EntryListener
+import app.simplecloud.simplecloud.distribution.api.*
 import app.simplecloud.simplecloud.distribution.hazelcast.HazelcastDistributionFactory
 import org.junit.jupiter.api.*
 
@@ -268,6 +265,25 @@ class DistributionCacheTest {
         serverCache.put("a3", 3)
         serverCache.put("b", 4)
         serverCache.put("b1", 5)
+        val values = clientCache.distributedQuery { key, _ -> key.contains("a") }
+        Assertions.assertEquals(hashSetOf(1, 2, 3), values.toHashSet())
+    }
+
+    @Test
+    fun entryProcessor_OnClient() {
+        this.server = this.factory.createServer(1630, emptyList())
+        this.client = this.factory.createClient(Address("127.0.0.1", 1630))
+        val serverCache = server!!.getOrCreateCache<String, Int>("one")
+        val clientCache = client!!.getOrCreateCache<String, Int>("one")
+        serverCache.put("a", 1)
+        val success = serverCache.executeOnKey("a", object : DistributionEntryProcessor<String, Int, Boolean> {
+            override fun process(entry: MutableMap.MutableEntry<String?, Int?>): Boolean {
+                val value = entry.value?: return false
+                entry.setValue(value + 1)
+                return true
+            }
+        })
+
         val values = clientCache.distributedQuery { key, _ -> key.contains("a") }
         Assertions.assertEquals(hashSetOf(1, 2, 3), values.toHashSet())
     }

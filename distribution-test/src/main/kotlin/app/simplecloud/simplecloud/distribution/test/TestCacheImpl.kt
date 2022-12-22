@@ -25,9 +25,11 @@
 package app.simplecloud.simplecloud.distribution.test
 
 import app.simplecloud.simplecloud.distribution.api.Cache
+import app.simplecloud.simplecloud.distribution.api.DistributionEntryProcessor
 import app.simplecloud.simplecloud.distribution.api.EntryListener
 import app.simplecloud.simplecloud.distribution.api.Predicate
 import com.google.common.collect.Maps
+import java.util.concurrent.CompletionStage
 import java.util.concurrent.CopyOnWriteArrayList
 
 class TestCacheImpl<K, V>(
@@ -44,6 +46,36 @@ class TestCacheImpl<K, V>(
 
     override fun first(): Map.Entry<K, V> {
         return this.map.entries.first()
+    }
+
+    override fun <R> executeOnEntries(
+        entryProcessor: DistributionEntryProcessor<K, V, R>,
+        predicate: Predicate<K, V>
+    ): Map<K, R> {
+        TODO("Not yet implemented")
+    }
+
+    override fun <R> executeOnEntries(entryProcessor: DistributionEntryProcessor<K, V, R>): Map<K, R> {
+        TODO("Not yet implemented")
+    }
+
+    override fun <R> submitToKey(key: K, entryProcessor: DistributionEntryProcessor<K, V, R>): CompletionStage<R> {
+        TODO("Not yet implemented")
+    }
+
+    override fun <R> submitToKeys(
+        keys: Set<K>,
+        entryProcessor: DistributionEntryProcessor<K, V, R>
+    ): CompletionStage<Map<K, R>?> {
+        TODO("Not yet implemented")
+    }
+
+    override fun <R> executeOnKeys(keys: Set<K>, entryProcessor: DistributionEntryProcessor<K, V, R>): Map<K, R> {
+        TODO("Not yet implemented")
+    }
+
+    override fun <R> executeOnKey(key: K, entryProcessor: DistributionEntryProcessor<K, V, R>): R {
+        TODO("Not yet implemented")
     }
 
     override val size: Int

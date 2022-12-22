@@ -25,12 +25,14 @@
 package app.simplecloud.simplecloud.distribution.hazelcast
 
 import app.simplecloud.simplecloud.distribution.api.Cache
+import app.simplecloud.simplecloud.distribution.api.DistributionEntryProcessor
 import app.simplecloud.simplecloud.distribution.api.EntryListener
 import app.simplecloud.simplecloud.distribution.api.Predicate
 import com.google.common.collect.Maps
 import com.hazelcast.core.EntryEvent
 import com.hazelcast.map.IMap
 import java.util.*
+import java.util.concurrent.CompletionStage
 
 
 class HazelCastCache<K, V>(
@@ -45,6 +47,41 @@ class HazelCastCache<K, V>(
 
     override fun first(): Map.Entry<K, V> {
         return this.hazelMap.first()
+    }
+
+    override fun <R> executeOnEntries(
+        entryProcessor: DistributionEntryProcessor<K, V, R>,
+        predicate: Predicate<K, V>
+    ): Map<K, R> {
+        return this.hazelMap.executeOnEntries(HazelcastEntryProcessor(entryProcessor)) {
+            predicate.apply(
+                it.key,
+                it.value
+            )
+        }
+    }
+
+    override fun <R> executeOnEntries(entryProcessor: DistributionEntryProcessor<K, V, R>): Map<K, R> {
+        return this.hazelMap.executeOnEntries(HazelcastEntryProcessor(entryProcessor))
+    }
+
+    override fun <R> submitToKey(key: K, entryProcessor: DistributionEntryProcessor<K, V, R>): CompletionStage<R> {
+        return this.hazelMap.submitToKey(key, HazelcastEntryProcessor(entryProcessor))
+    }
+
+    override fun <R> submitToKeys(
+        keys: Set<K>,
+        entryProcessor: DistributionEntryProcessor<K, V, R>
+    ): CompletionStage<Map<K, R>?> {
+        return this.hazelMap.submitToKeys(keys, HazelcastEntryProcessor(entryProcessor))
+    }
+
+    override fun <R> executeOnKeys(keys: Set<K>, entryProcessor: DistributionEntryProcessor<K, V, R>): Map<K, R> {
+        return this.hazelMap.executeOnKeys(keys, HazelcastEntryProcessor(entryProcessor))
+    }
+
+    override fun <R> executeOnKey(key: K, entryProcessor: DistributionEntryProcessor<K, V, R>): R {
+        return this.hazelMap.executeOnKey(key, HazelcastEntryProcessor(entryProcessor))
     }
 
     override val size: Int

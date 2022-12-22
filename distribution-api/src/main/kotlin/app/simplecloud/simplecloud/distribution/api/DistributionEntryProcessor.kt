@@ -24,52 +24,10 @@
 
 package app.simplecloud.simplecloud.distribution.api
 
-import java.util.concurrent.CompletionStage
+import java.io.Serializable
 
-/**
- * Date: 03.04.22
- * Time: 15:43
- * @author Frederick Baier
- *
- */
-interface Cache<K, V> : MutableMap<K, V> {
+interface DistributionEntryProcessor<K, V, R> : Serializable {
 
-    fun getName(): String
-
-    fun first(): Map.Entry<K, V>
-
-    fun set(key: K, value: V)
-
-    fun <R> executeOnKey(
-        key: K,
-        entryProcessor: DistributionEntryProcessor<K, V, R>
-    ): R
-
-    fun <R> executeOnKeys(
-        keys: Set<K>,
-        entryProcessor: DistributionEntryProcessor<K, V, R>
-    ): Map<K, R>
-
-    fun <R> submitToKeys(
-        keys: Set<K>,
-        entryProcessor: DistributionEntryProcessor<K, V, R>
-    ): CompletionStage<Map<K, R>?>
-
-    fun <R> submitToKey(
-        key: K,
-        entryProcessor: DistributionEntryProcessor<K, V, R>
-    ): CompletionStage<R>
-
-    fun <R> executeOnEntries(entryProcessor: DistributionEntryProcessor<K, V, R>): Map<K, R>
-
-    fun <R> executeOnEntries(
-        entryProcessor: DistributionEntryProcessor<K, V, R>,
-        predicate: Predicate<K, V>
-    ): Map<K, R>
-
-
-    fun addEntryListener(entryListener: EntryListener<K, V>)
-
-    fun distributedQuery(predicate: Predicate<K, V>): Collection<V>
+    fun process(entry: MutableMap.MutableEntry<K?, V?>): R
 
 }
